@@ -85,7 +85,7 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="max-w-2xl mx-auto p-4">
+    <main className="max-w-5xl mx-auto p-4">
       <h1 className="text-xl font-bold mb-4">添加新文章</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
