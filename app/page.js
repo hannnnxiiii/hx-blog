@@ -7,7 +7,7 @@ export default async function Home() {
 
   return (
     <main className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">林晗曦的网络日志</h1>
+      <h1 className="text-2xl font-bold mb-4">林晗曦的网络日志^^</h1>
       <ul>
         {posts.map((post) => (
           <li key={post.id} className="mb-2">
