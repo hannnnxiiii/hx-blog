@@ -53,9 +53,7 @@ export default function AdminPage() {
 
   // ✏️ 插入内容到当前光标处
   const insertAtCursor = (text) => {
-    const textarea = document.querySelector(
-      '.w-md-editor-text-input'
-    )
+    const textarea = document.querySelector('.w-md-editor-text-input')
     if (!textarea) return
 
     const start = textarea.selectionStart
@@ -91,7 +89,7 @@ export default function AdminPage() {
         <input
           type="text"
           value={title}
-          onChange={e => setTitle(e.target.value)}
+          onChange={(e) => setTitle(e.target.value)}
           placeholder="文章标题"
           className="border px-2 py-1 rounded"
           required
@@ -100,7 +98,8 @@ export default function AdminPage() {
           <MDEditor
             value={content}
             onChange={(val = '') => setContent(val)}
-            preview="edit"
+            preview="live"
+            height={'80vh'}
           />
         </div>
         <button

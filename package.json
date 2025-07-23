@@ -13,6 +13,7 @@
     "@uiw/react-markdown-preview": "^5.1.4",
     "@uiw/react-md-editor": "^4.0.8",
     "bcryptjs": "^3.0.2",
+    "dayjs": "^1.11.13",
     "gray-matter": "^4.0.3",
     "jose": "^6.0.12",
     "jsonwebtoken": "^9.0.2",
