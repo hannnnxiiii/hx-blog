@@ -5,6 +5,7 @@ import rehypeHighlight from 'rehype-highlight'
 import rehypeStringify from 'rehype-stringify'
 
 export default async function PostDetail({ params }) {
+  params = await params
   const res = await fetch(`http://localhost:3000/api/posts/${params.id}`, {
     cache: 'no-store',
   })

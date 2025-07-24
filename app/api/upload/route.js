@@ -3,6 +3,16 @@ import fs from 'fs'
 import path from 'path'
 
 export async function POST(req) {
+  const token = req.cookies.get('token')?.value
+  if (!token) {
+    return NextResponse.json({ error: '未授权：缺少 token' }, { status: 401 })
+  }
+
+  try {
+    jwt.verify(token, process.env.JWT_SECRET)
+  } catch (err) {
+    return NextResponse.json({ error: '未授权：token 无效' }, { status: 401 })
+  }
   const formData = await req.formData()
   const file = formData.get('file')
 
