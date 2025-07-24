@@ -2,9 +2,9 @@
 
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 
-// 动态导入 Markdown 编辑器（避免 SSR 报错）
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
 export default function AdminPage() {
@@ -12,8 +12,22 @@ export default function AdminPage() {
   const [content, setContent] = useState('')
   const editorRef = useRef(null)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const postId = searchParams.get('id') // 获取参数 id
 
-  // 🔁 粘贴图片监听逻辑
+  // 👇 获取旧数据（用于编辑模式）
+  useEffect(() => {
+    if (postId) {
+      fetch(`/api/posts/${postId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setTitle(data.title)
+          setContent(data.content)
+        })
+    }
+  }, [postId])
+
+  // 粘贴图片
   useEffect(() => {
     const handler = async (e) => {
       if (!e.clipboardData) return
@@ -38,7 +52,6 @@ export default function AdminPage() {
     }
   }, [content])
 
-  // 📤 上传图片
   const uploadImage = async (file) => {
     const formData = new FormData()
     formData.append('file', file)
@@ -51,7 +64,6 @@ export default function AdminPage() {
     return data.url
   }
 
-  // ✏️ 插入内容到当前光标处
   const insertAtCursor = (text) => {
     const textarea = document.querySelector('.w-md-editor-text-input')
     if (!textarea) return
@@ -64,27 +76,51 @@ export default function AdminPage() {
 
     setContent(newContent)
 
-    // 移动光标
     requestAnimationFrame(() => {
       textarea.focus()
       textarea.selectionStart = textarea.selectionEnd = start + text.length
     })
   }
 
-  // 🔐 文章提交
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await fetch('/api/posts', {
-      method: 'POST',
+    const method = postId ? 'PUT' : 'POST'
+    const url = postId ? `/api/posts/${postId}` : '/api/posts'
+
+    await fetch(url, {
+      method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title, content }),
     })
+
     router.push('/')
   }
 
   return (
     <main className="max-w-5xl mx-auto p-4">
-      <h1 className="text-xl font-bold mb-4">添加新文章</h1>
+      <Link
+        href="/"
+        className="text-blue-600 flex gap-1 items-center hover:underline"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-4"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+          />
+        </svg>
+        返回首页
+      </Link>
+      <h1 className="text-xl font-bold my-4">
+        {postId ? '编辑文章' : '添加新文章'}
+      </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="text"
@@ -106,7 +142,7 @@ export default function AdminPage() {
           type="submit"
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
-          发布文章
+          {postId ? '保存修改' : '发布文章'}
         </button>
       </form>
     </main>

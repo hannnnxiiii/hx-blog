@@ -14,14 +14,17 @@ export default async function PostDetail({ params }) {
 
   return (
     <main className="max-w-5xl mx-auto p-6">
-      <Link href="/" className="text-blue-600 flex gap-1 items-center">
+      <Link
+        href="/"
+        className="text-blue-600 flex gap-1 items-center hover:underline"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="size-6"
+          className="size-4"
         >
           <path
             strokeLinecap="round"
@@ -31,7 +34,7 @@ export default async function PostDetail({ params }) {
         </svg>
         返回首页
       </Link>
-      <h1 className="text-2xl font-bold my-2">{post.title}</h1>
+      <h1 className="text-4xl font-bold my-2">{post.title}</h1>
       <p className="text-sm text-gray-500 mb-4">
         {new Date(post.createdAt).toLocaleString()}
       </p>
