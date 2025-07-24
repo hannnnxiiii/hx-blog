@@ -1,7 +1,6 @@
 // app/admin/page.js
 'use client'
 
-import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
 import EditorForm from './editor-form'
 

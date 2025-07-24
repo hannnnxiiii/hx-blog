@@ -1,6 +1,8 @@
 import { remark } from 'remark'
-import html from 'remark-html'
 import Link from 'next/link'
+import remarkRehype from 'remark-rehype'
+import rehypeHighlight from 'rehype-highlight'
+import rehypeStringify from 'rehype-stringify'
 
 export default async function PostDetail({ params }) {
   const res = await fetch(`http://localhost:3000/api/posts/${params.id}`, {
@@ -9,7 +11,11 @@ export default async function PostDetail({ params }) {
   const post = await res.json()
 
   // Markdown → HTML
-  const processedContent = await remark().use(html).process(post.content)
+  const processedContent = await remark()
+    .use(remarkRehype)
+    .use(rehypeHighlight)
+    .use(rehypeStringify)
+    .process(post.content)
   const contentHtml = processedContent.toString()
 
   return (
