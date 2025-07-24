@@ -43,7 +43,7 @@ export default function EditorForm() {
     const container = editorRef.current
     container?.addEventListener('paste', handler)
     return () => container?.removeEventListener('paste', handler)
-  }, [content])
+  }, [])
 
   const uploadImage = async (file) => {
     const formData = new FormData()
@@ -63,11 +63,11 @@ export default function EditorForm() {
 
     const start = textarea.selectionStart
     const end = textarea.selectionEnd
-    const before = content.substring(0, start)
-    const after = content.substring(end)
-    const newContent = before + text + after
-
-    setContent(newContent)
+    setContent((prevContent) => {
+      const before = prevContent.substring(0, start)
+      const after = prevContent.substring(end)
+      return before + text + after
+    })
 
     requestAnimationFrame(() => {
       textarea.focus()
