@@ -41,7 +41,7 @@ export default async function PostDetail({ params }) {
         </svg>
         返回首页
       </Link>
-      <h1 className="text-4xl font-bold my-2">{post.title}</h1>
+      <h1 className="text-4xl font-bold my-8">{post.title}</h1>
       <p className="text-sm text-gray-500 mb-4">
         {new Date(post.createdAt).toLocaleString()}
       </p>

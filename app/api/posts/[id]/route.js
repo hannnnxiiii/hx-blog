@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { NextResponse } from 'next/server'
+import jwt from 'jsonwebtoken'
 
 export async function GET(_, { params }) {
   params = await params

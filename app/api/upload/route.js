@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
+import jwt from 'jsonwebtoken'
 
 export async function POST(req) {
   const token = req.cookies.get('token')?.value
