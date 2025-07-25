@@ -80,13 +80,22 @@ export default function EditorForm() {
     const method = postId ? 'PUT' : 'POST'
     const url = postId ? `/api/posts/${postId}` : '/api/posts'
 
-    await fetch(url, {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, content }),
-    })
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content }),
+      })
 
-    router.push('/')
+      if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.message || '提交失败，请稍后重试')
+      }
+
+      router.push('/')
+    } catch (err) {
+      alert(err.message || '提交失败，请检查网络或稍后再试')
+    }
   }
 
   return (
