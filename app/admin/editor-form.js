@@ -9,6 +9,7 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 export default function EditorForm() {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false) // 新增状态
   const editorRef = useRef(null)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -77,6 +78,8 @@ export default function EditorForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setIsSubmitting(true) // 开始提交，禁用按钮
+
     const method = postId ? 'PUT' : 'POST'
     const url = postId ? `/api/posts/${postId}` : '/api/posts'
 
@@ -95,6 +98,7 @@ export default function EditorForm() {
       router.push('/')
     } catch (err) {
       alert(err.message || '提交失败，请检查网络或稍后再试')
+      setIsSubmitting(false) // 失败时恢复按钮可用
     }
   }
 
@@ -118,9 +122,14 @@ export default function EditorForm() {
       </div>
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        disabled={isSubmitting}
+        className={`px-4 py-2 rounded text-white ${
+          isSubmitting
+            ? 'bg-gray-400 cursor-not-allowed'
+            : 'bg-blue-600 hover:bg-blue-700'
+        }`}
       >
-        {postId ? '保存修改' : '发布文章'}
+        {isSubmitting ? '提交中...' : postId ? '保存修改' : '发布文章'}
       </button>
     </form>
   )
